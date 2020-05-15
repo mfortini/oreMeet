@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import re
 import datetime
 import logging
 import io
@@ -19,13 +20,18 @@ def roundTime(t, step, direction):
 def formatSeconds(t):
     return "%02d:%02d:%02d" % (t//3600, (t%3600)//60, t%60)
 
-def meetReport (csvFile, meetingCode, _startTime, _endTime, startStep, startRoundDir, midThr, midStep, midRoundDir, endStep, endRoundDir):
+def meetReport (fileName, fileData, meetingCode, _startTime, _endTime, startStep, startRoundDir, midThr, midStep, midRoundDir, endStep, endRoundDir):
 
     meetingStartTime=pd.to_datetime(_startTime).tz_localize(None)
     meetingEndTime=pd.to_datetime(_endTime).tz_localize(None)
 
 
-    meetData = pd.read_csv(csvFile)
+    if re.match(".*\.csv$", fileName):
+        meetData = pd.read_csv(fileData)
+    elif re.match(".*\.xlsx?$", fileName):
+        meetData = pd.read_excel(fileData)
+
+
     meetingData = meetData[meetData["Codice riunione"]==meetingCode]
     meetingData["Data"]=pd.to_datetime(meetingData["Data"]).dt.tz_localize(None)
     meetingData["endTime"]=pd.to_datetime(meetingData["Data"]).dt.tz_localize(None)
@@ -80,13 +86,13 @@ def meetReport (csvFile, meetingCode, _startTime, _endTime, startStep, startRoun
         
         results.append(participantRes)
 
-    output=io.StringIO()
+    output=io.BytesIO()
     dfResults=pd.DataFrame(results)
 
     for col in ["Assenza inizio arrotondata", "Assenza intermedia arrotondata", "Assenza fine arrotondata", "Presente complessivo arrotondato"]:
         dfResults[col] = list(map(lambda x:formatSeconds(x),dfResults[col]))
 
-    dfResults.to_csv(output)
+    dfResults.to_excel(output)
 
     return output
 

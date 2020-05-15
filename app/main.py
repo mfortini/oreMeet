@@ -35,11 +35,11 @@ async def create_file(
     endStep: int = Form(...),
     endRoundDir: str = Form(...),
 ):
-    result=meetReport(file.file, meetingCode, startTime, endTime, startStep, startRoundDir, midThr, midStep, midRoundDir, endStep, endRoundDir)
+    result=meetReport(file.filename,file.file, meetingCode, startTime, endTime, startStep, startRoundDir, midThr, midStep, midRoundDir, endStep, endRoundDir)
     result.seek(0)
     return StreamingResponse(
             result,
-            media_type='text/csv',
+            media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             #headers={'Content-Disposition': 'attachment;filename="pippo.csv"'}
         )
 
