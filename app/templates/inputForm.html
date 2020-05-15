@@ -1,53 +1,134 @@
-<html>
-    <h2>Meet Report</h2>
+<!doctype html>
+<html lang="it">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <form action="/meetReport/" method="POST" enctype="multipart/form-data">
-         <label for="file">Select a file:</label>
-         <input type="file" id="file" name="file"><br>
-        <label for="meetingCode">Codice meeting:</label><br>
-        <input type="text" id="meetingCode" name="meetingCode" />
-        <br>
-        <label for="startTime">Data e ora inizio:</label><br>
-        <input type="text" id="startTime" name="startTime"/>
-        <br>
-        <label for="endTime">Data e ora fine:</label><br>
-        <input type="text" id="endTime" name="endTime" />
-        <br>
-        <label for="startStep">Passo arrotondamento entrata (s):</label><br>
-        <input type="text" id="startStep" name="startStep" />
-        <br>
-         <input type="radio" id="down" name="startRoundDir" value="down">
-         <label for="down">Per difetto</label><br>
-         <input type="radio" id="up" name="startRoundDir" value="up">
-         <label for="up">Per eccesso</label><br>
-         <input type="radio" id="round" name="startRoundDir" value="round">
-         <label for="round">Arrotondato</label><br>
-        <br>
-        <label for="midThr">Soglia interruzioni intermedie (s):</label><br>
-        <input type="text" id="midThr" name="midThr" />
-        <br>
-        <label for="midStep">Passo arrotondamento interruzioni intermedie (s):</label><br>
-        <input type="text" id="midStep" name="midStep" />
-        <br>
-         <input type="radio" id="down" name="midRoundDir" value="down">
-         <label for="down">Per difetto</label><br>
-         <input type="radio" id="up" name="midRoundDir" value="up">
-         <label for="up">Per eccesso</label><br>
-         <input type="radio" id="round" name="midRoundDir" value="round">
-         <label for="round">Arrotondato</label><br>
-        <br>
-        <label for="endStep">Passo arrotondamento uscita (s):</label><br>
-        <input type="text" id="endStep" name="endStep" />
-        <br>
-         <input type="radio" id="down" name="endRoundDir" value="down">
-         <label for="down">Per difetto</label><br>
-         <input type="radio" id="up" name="endRoundDir" value="up">
-         <label for="up">Per eccesso</label><br>
-         <input type="radio" id="round" name="endRoundDir" value="round">
-         <label for="round">Arrotondato</label><br>
-        <br>
-        <input type="submit"></input>
-    </form>
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 
-</html
+        <title>Meet Report</title>
+    </head>
+    <body>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h2>Meet Report</h2>
+                        <form  class="col-md-6" action="/meetReport/" method="POST" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <div class="form-row">
+                                    <input type="file" class="form-control-file col-6" id="file" name="file">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-row">
+                                    <label for="meetingCode" class="col-4">Codice meeting:</label>
+                                    <input type="text" id="meetingCode" class="form-control col-4" name="meetingCode" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-row">
+                                    <label for="startTime" class="col-4">Data e ora inizio:</label>
+                                    <input type="datetime-local" id="startTime"  class="form-control col-4" name="startTime"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-row">
+                                    <label for="endTime" class="col-4">Data e ora fine:</label>
+                                    <input type="datetime-local" id="endTime"  class="form-control col-4" name="endTime" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <div class="form-row">
+                                        <label for="startStep" class="col-7">Passo arrotondamento entrata (s):</label>
+                                        <input type="text" id="startStep"  class="form-control col-5" name="startStep" />
+                                    </div>
+                                </div>
+                                <div class="form-check-inline">
+                                    <label class="form-check-label">
+                                        <input type="radio" id="down" name="startRoundDir" class="form-check-input" value="down">Per difetto
+                                    </label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <label class="form-check-label">
+                                        <input type="radio" id="up" name="startRoundDir" class="form-check-input" value="up">Per eccesso
+                                    </label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <label class="form-check-label">
+                                        <input type="radio" id="round" name="startRoundDir" class="form-check-input" value="round">Arrotondato
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <div class="form-row">
+                                        <label for="midThr" class="col-7">Soglia interruzioni (s):</label>
+                                        <input type="text" id="midThr"  class="form-control col-5" name="midThr" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="form-row">
+                                        <label for="midStep" class="col-7">Passo arrotondamento interruzioni (s):</label>
+                                        <input type="text" id="midStep"  class="form-control col-5" name="midStep" />
+                                    </div>
+                                </div>
+                                <div class="form-check-inline">
+                                    <label class="form-check-label">
+                                        <input type="radio" id="down" name="midRoundDir" class="form-check-input" value="down">Per difetto
+                                    </label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <label class="form-check-label">
+                                        <input type="radio" id="up" name="midRoundDir" class="form-check-input" value="up">Per eccesso
+                                    </label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <label class="form-check-label">
+                                        <input type="radio" id="round" name="midRoundDir" class="form-check-input" value="round">Arrotondato
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <div class="form-row">
+                                        <label for="endStep" class="col-7">Passo arrotondamento uscita (s):</label>
+                                        <input type="text" id="midStep"  class="form-control col-5" name="endStep" />
+                                    </div>
+                                </div>
+                                <div class="form-check-inline">
+                                    <label class="form-check-label">
+                                        <input type="radio" id="down" name="endRoundDir" class="form-check-input" value="down">Per difetto
+                                    </label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <label class="form-check-label">
+                                        <input type="radio" id="up" name="endRoundDir" class="form-check-input" value="up">Per eccesso
+                                    </label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <label class="form-check-label">
+                                        <input type="radio" id="round" name="endRoundDir" class="form-check-input" value="round">Arrotondato
+                                    </label>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Elabora</button>
+                        </form>
+                    </div>
+
+                </div>
+        </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+  </body>
+</html>
 
