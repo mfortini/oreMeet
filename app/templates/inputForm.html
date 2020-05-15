@@ -1,0 +1,53 @@
+<html>
+    <h2>Meet Report</h2>
+
+    <form action="/meetReport/" method="POST" enctype="multipart/form-data">
+         <label for="file">Select a file:</label>
+         <input type="file" id="file" name="file"><br>
+        <label for="meetingCode">Codice meeting:</label><br>
+        <input type="text" id="meetingCode" name="meetingCode" />
+        <br>
+        <label for="startTime">Data e ora inizio:</label><br>
+        <input type="text" id="startTime" name="startTime"/>
+        <br>
+        <label for="endTime">Data e ora fine:</label><br>
+        <input type="text" id="endTime" name="endTime" />
+        <br>
+        <label for="startStep">Passo arrotondamento entrata (s):</label><br>
+        <input type="text" id="startStep" name="startStep" />
+        <br>
+         <input type="radio" id="down" name="startRoundDir" value="down">
+         <label for="down">Per difetto</label><br>
+         <input type="radio" id="up" name="startRoundDir" value="up">
+         <label for="up">Per eccesso</label><br>
+         <input type="radio" id="round" name="startRoundDir" value="round">
+         <label for="round">Arrotondato</label><br>
+        <br>
+        <label for="midThr">Soglia interruzioni intermedie (s):</label><br>
+        <input type="text" id="midThr" name="midThr" />
+        <br>
+        <label for="midStep">Passo arrotondamento interruzioni intermedie (s):</label><br>
+        <input type="text" id="midStep" name="midStep" />
+        <br>
+         <input type="radio" id="down" name="midRoundDir" value="down">
+         <label for="down">Per difetto</label><br>
+         <input type="radio" id="up" name="midRoundDir" value="up">
+         <label for="up">Per eccesso</label><br>
+         <input type="radio" id="round" name="midRoundDir" value="round">
+         <label for="round">Arrotondato</label><br>
+        <br>
+        <label for="endStep">Passo arrotondamento uscita (s):</label><br>
+        <input type="text" id="endStep" name="endStep" />
+        <br>
+         <input type="radio" id="down" name="endRoundDir" value="down">
+         <label for="down">Per difetto</label><br>
+         <input type="radio" id="up" name="endRoundDir" value="up">
+         <label for="up">Per eccesso</label><br>
+         <input type="radio" id="round" name="endRoundDir" value="round">
+         <label for="round">Arrotondato</label><br>
+        <br>
+        <input type="submit"></input>
+    </form>
+
+</html
+
