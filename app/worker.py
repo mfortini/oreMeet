@@ -20,11 +20,42 @@ def roundTime(t, step, direction):
 def formatSeconds(t):
     return "%02d:%02d:%02d" % (t//3600, (t%3600)//60, t%60)
 
+def convertDates(_startTime, _endTime, meetingData):
+    try:
+        meetingStartTime=pd.to_datetime(_startTime).tz_localize(None)
+        meetingEndTime=pd.to_datetime(_endTime).tz_localize(None)
+        meetingData["Data"]=pd.to_datetime(meetingData["Data"]).dt.tz_localize(None)
+        meetingData["endTime"]=pd.to_datetime(meetingData["Data"]).dt.tz_localize(None)
+
+        return meetingStartTime, meetingEndTime, meetingData
+    except ParserError:
+        pass
+
+    import locale
+
+    locale.setlocale(locale.LC_ALL, "it_IT.UTF-8")
+
+    try:
+        meetingStartTime=pd.to_datetime(_startTime).tz_localize(None)
+        meetingEndTime=pd.to_datetime(_endTime).tz_localize(None)
+        meetingData["Data"]=pd.to_datetime(meetingData["Data"]).dt.tz_localize(None)
+        meetingData["endTime"]=pd.to_datetime(meetingData["Data"]).dt.tz_localize(None)
+
+        return meetingStartTime, meetingEndTime, meetingData
+    except ParserError:
+        pass
+
+    formatStr="%d %b %Y, %H:%M:%S %Z"
+    meetingStartTime=pd.to_datetime(_startTime, format=formatStr).tz_localize(None)
+    meetingEndTime=pd.to_datetime(_endTime, format=formatStr).tz_localize(None)
+    meetingData["Data"]=pd.to_datetime(meetingData["Data"], format=formatStr).dt.tz_localize(None)
+    meetingData["endTime"]=pd.to_datetime(meetingData["Data"], format=formatStr).dt.tz_localize(None)
+
+    return meetingStartTime, meetingEndTime, meetingData
+    
+    
+
 def meetReport (fileName, fileData, meetingCode, _startTime, _endTime, startStep, startRoundDir, midThr, midStep, midRoundDir, endStep, endRoundDir):
-
-    meetingStartTime=pd.to_datetime(_startTime).tz_localize(None)
-    meetingEndTime=pd.to_datetime(_endTime).tz_localize(None)
-
 
     if re.match(".*\.csv$", fileName):
         meetData = pd.read_csv(fileData)
@@ -33,8 +64,9 @@ def meetReport (fileName, fileData, meetingCode, _startTime, _endTime, startStep
 
 
     meetingData = meetData[meetData["Codice riunione"]==meetingCode]
-    meetingData["Data"]=pd.to_datetime(meetingData["Data"]).dt.tz_localize(None)
-    meetingData["endTime"]=pd.to_datetime(meetingData["Data"]).dt.tz_localize(None)
+
+    meetingStartTime, meetingEndTime, meetingData = convertDates(_startTime, _endTime, meetingData)
+
     meetingData["startTime"]=list(map(lambda x:x[1]["endTime"]-pd.to_timedelta(x[1]["Durata"],'s'),meetingData.iterrows()))
 
     meetingData.loc[:,["endTime","startTime"]]=meetingData[["endTime","startTime"]].clip(lower=meetingStartTime,upper=meetingEndTime)
