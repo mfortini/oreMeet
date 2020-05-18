@@ -45,7 +45,7 @@
                                 <div class="form-group">
                                     <div class="form-row">
                                         <label for="startStep" class="col-7">Passo arrotondamento entrata (s):</label>
-                                        <input type="text" id="startStep"  class="form-control col-5" name="startStep" />
+                                        <input type="text" id="startStep"  class="form-control col-5" name="startStep" value="900" maxlength="6" />
                                     </div>
                                 </div>
                                 <div class="form-check-inline">
@@ -60,7 +60,7 @@
                                 </div>
                                 <div class="form-check-inline">
                                     <label class="form-check-label">
-                                        <input type="radio" id="round" name="startRoundDir" class="form-check-input" value="round">Arrotondato
+                                        <input type="radio" id="round" name="startRoundDir" class="form-check-input" value="round" checked>Arrotondato
                                     </label>
                                 </div>
                             </div>
@@ -69,13 +69,13 @@
                                 <div class="form-group">
                                     <div class="form-row">
                                         <label for="midThr" class="col-7">Soglia interruzioni (s):</label>
-                                        <input type="text" id="midThr"  class="form-control col-5" name="midThr" />
+                                        <input type="text" id="midThr"  class="form-control col-5" name="midThr" value="300" maxlength="6" />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="form-row">
                                         <label for="midStep" class="col-7">Passo arrotondamento interruzioni (s):</label>
-                                        <input type="text" id="midStep"  class="form-control col-5" name="midStep" />
+                                        <input type="text" id="midStep"  class="form-control col-5" name="midStep" value="900" maxlength="6"/>
                                     </div>
                                 </div>
                                 <div class="form-check-inline">
@@ -90,7 +90,7 @@
                                 </div>
                                 <div class="form-check-inline">
                                     <label class="form-check-label">
-                                        <input type="radio" id="round" name="midRoundDir" class="form-check-input" value="round">Arrotondato
+                                        <input type="radio" id="round" name="midRoundDir" class="form-check-input" value="round" checked>Arrotondato
                                     </label>
                                 </div>
                             </div>
@@ -98,7 +98,7 @@
                                 <div class="form-group">
                                     <div class="form-row">
                                         <label for="endStep" class="col-7">Passo arrotondamento uscita (s):</label>
-                                        <input type="text" id="midStep"  class="form-control col-5" name="endStep" />
+                                        <input type="text" id="midStep"  class="form-control col-5" name="endStep" value="900" maxlength="6" />
                                     </div>
                                 </div>
                                 <div class="form-check-inline">
@@ -113,7 +113,7 @@
                                 </div>
                                 <div class="form-check-inline">
                                     <label class="form-check-label">
-                                        <input type="radio" id="round" name="endRoundDir" class="form-check-input" value="round">Arrotondato
+                                        <input type="radio" id="round" name="endRoundDir" class="form-check-input" value="round" checked>Arrotondato
                                     </label>
                                 </div>
                             </div>
@@ -129,6 +129,45 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+    <script>
+        function handleFile(e) {
+            var files = e.target.files, f = files[0];
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var data = new Uint8Array(e.target.result);
+                var workbook = XLSX.read(data, {type: 'array'});
+
+                /* DO SOMETHING WITH workbook HERE */
+                sheet=workbook.Sheets[workbook.SheetNames[0]];
+
+                meetingCode=sheet["D2"]
+                console.log(meetingCode)
+                $('#meetingCode').val(meetingCode.v);
+
+
+
+                jsond=XLSX.utils.sheet_to_json(sheet);
+                minDate = jsond[0]["Data"];
+                maxDate = jsond[0]["Data"];
+                for (var i = 0; i < jsond.length; i++) {
+                    tmpDate=jsond[i]["Data"];
+                    if (tmpDate<minDate) {
+                        minDate=tmpDate;
+                    }
+                    if (tmpDate>maxDate) {
+                        maxDate=tmpDate;
+                    }
+                }
+
+                $("#startTime").val(minDate);
+                $("#endTime").val(maxDate);
+            };
+            reader.readAsArrayBuffer(f);
+        }
+	var xlf = $('#file');
+	xlf.change(handleFile);
+    </script>
   </body>
 </html>
 
