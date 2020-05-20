@@ -127,7 +127,7 @@ def convertDate(d):
         except:
             pass
 
-    locale.setlocale(locale.LC_ALL, "it_IT.UTF-8")
+    locale.setlocale(locale.LC_ALL, "it_IT.utf8")
     try:
         return pd.to_datetime(d).tz_localize(None)
     except:
@@ -139,7 +139,7 @@ def convertDate(d):
     #except:
     #    pass
 
-    locale.setlocale(locale.LC_ALL, "it_IT.UTF-8")
+    locale.setlocale(locale.LC_ALL, "it_IT.utf8")
     formatStr="%d %b %Y, %H:%M:%S %Z"
     try:
         return pd.to_datetime(d, format=formatStr).tz_convert(TZ).tz_localize(None)
