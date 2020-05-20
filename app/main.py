@@ -24,6 +24,7 @@ async def read_item(request: Request, id: str):
 @app.post("/meetReport/")
 async def create_file(
     file: UploadFile = File(...),
+    calFile: UploadFile = File(None),
     meetingCode: str = Form(...),
     startTime: str = Form(...),
     endTime: str = Form(...),
@@ -35,7 +36,9 @@ async def create_file(
     endStep: int = Form(...),
     endRoundDir: str = Form(...),
 ):
-    result=meetReport(file.filename,file.file, meetingCode, startTime, endTime, startStep, startRoundDir, midThr, midStep, midRoundDir, endStep, endRoundDir)
+
+    print(calFile)
+    result=meetReport(file.filename,file.file, calFile.file if calFile else None, meetingCode, startTime, endTime, startStep, startRoundDir, midThr, midStep, midRoundDir, endStep, endRoundDir)
     result.seek(0)
     return StreamingResponse(
             result,

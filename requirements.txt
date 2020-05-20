@@ -3,6 +3,6 @@ pandas==1.0.3
 fastapi==0.54.1
 python-multipart==0.0.5
 aiofiles==0.5.0
-
+ics==0.7
 openpyxl==3.0.3
 xlrd==1.2.0
