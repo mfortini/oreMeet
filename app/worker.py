@@ -129,15 +129,14 @@ def convertDate(d):
 
     locale.setlocale(locale.LC_ALL, "it_IT.utf8")
     try:
-        return pd.to_datetime(d).tz_localize(None)
+        return pd.to_datetime(d).tz_convert(TZ).tz_localize(None)
     except:
         pass
 
-    #locale.setlocale(locale.LC_ALL, "en")
-    #try:
-    #    return pd.to_datetime(d).tz_localize(None)
-    #except:
-    #    pass
+    try:
+        return pd.to_datetime(d).tz_localize(None)
+    except:
+        pass
 
     locale.setlocale(locale.LC_ALL, "it_IT.utf8")
     formatStr="%d %b %Y, %H:%M:%S %Z"
@@ -154,7 +153,6 @@ def convertDate(d):
 
     formatStr="%d %b %Y, %H:%M:%S"
     try:
-        return pd.to_datetime(d, format=formatStr).tz_convert(TZ).tz_localize(None)
         return pd.to_datetime(d, format=formatStr).tz_localize(None)
     except:
         pass
