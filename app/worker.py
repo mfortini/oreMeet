@@ -197,7 +197,7 @@ def meetReport (fileName, meetFileData, icsFileData, meetingCode, _startTime, _e
 
                     #print ("COUNT", count, "len meetdata", len(meetData))
 
-                    if count > (len(meetData) * .3):
+                    if count > (len(meetData) * .5):
                         meetingCode = getEventMeetingCode(e)
                         meetingStartTime = calStartTime
                         meetingEndTime = calEndTime
@@ -209,15 +209,18 @@ def meetReport (fileName, meetFileData, icsFileData, meetingCode, _startTime, _e
     if len(meetingData) == 0:
         return None
 
-    meetingData.loc[:,["endTime","startTime"]]=meetingData[["endTime","startTime"]].clip(lower=meetingStartTime,upper=meetingEndTime)
+    meetingData.loc[:,"startTimeClip"]=meetingData["startTime"].clip(lower=meetingStartTime,upper=meetingEndTime)
+    meetingData.loc[:,"endTimeClip"]=meetingData["endTime"].clip(lower=meetingStartTime,upper=meetingEndTime)
 
-    participantsTime=meetingData.groupby(["Identificatore partecipante","Nome evento"])
+    participantsTime=meetingData.groupby(["Identificatore partecipante", "Nome partecipante", "Nome evento"])
 
     results=[]
 
     for name,g in participantsTime:
-        participantName = name[0]
+        participantId = name[0]
+        participantName = name[1]
         participantRes={
+                "Id": participantId,
                 "Nome": participantName,
                 "Assenza intermedia sogliata":0,
                 "Assenza intermedia arrotondata":0,
@@ -229,32 +232,38 @@ def meetReport (fileName, meetFileData, icsFileData, meetingCode, _startTime, _e
         intervals = []
         for itt,tt in g.sort_values(by="startTime").iterrows():
             if len(intervals) == 0 or tt["startTime"] > intervals[-1]["endTime"]:
-                intervals.append(tt[["startTime","endTime"]])
+                intervals.append(tt[["startTime", "endTime", "startTimeClip","endTimeClip"]])
             else:
                 logging.warning("overlapping intervals {} and {}".format(intervals[-1],tt[["startTime", "endTime"]]))
+                intervals[-1]["endTimeClip"]=tt["endTimeClip"]
                 intervals[-1]["endTime"]=tt["endTime"]
 
         curTime=meetingStartTime
         for iv in intervals:
-            logging.debug("curTime {} startTime {} endTime {}".format(curTime, iv["startTime"],iv["endTime"]))
-            diffTime=(iv["startTime"]-curTime).seconds
+            logging.debug("curTime {} startTimeClip {} endTimeClip {}".format(curTime, iv["startTimeClip"],iv["endTimeClip"]))
+            diffTime=(iv["startTimeClip"]-curTime).seconds
             logging.debug("diffTime {}".format(diffTime))
             if beginning:
                 beginning=False
-                participantRes["Orario entrata"]=iv["startTime"]
+                participantRes["Orario entrata reale"]=iv["startTime"]
+                participantRes["Orario entrata"]=iv["startTimeClip"]
                 participantRes["Assenza inizio"]=diffTime
                 participantRes["Assenza inizio arrotondata"]=roundTime(diffTime, startStep, startRoundDir)
             else:
                 participantRes["Assenza intermedia sogliata"] += diffTime if diffTime >= midThr else 0
                 participantRes["Assenza intermedia"] += diffTime
-            participantRes["Presente netto"] += (iv["endTime"]-iv["startTime"]).seconds
-            curTime=iv["endTime"]
+            participantRes["Presente netto"] += (iv["endTimeClip"]-iv["startTimeClip"]).seconds
+            curTime=iv["endTimeClip"]
         diffTime=meetingEndTime-curTime
         participantRes["Assenza fine"]=diffTime.seconds
         participantRes["Assenza fine arrotondata"]=roundTime(diffTime.seconds, endStep, endRoundDir)
-        participantRes["Orario uscita"]=curTime
+        participantRes["Orario uscita reale"]=iv["endTime"]
+        participantRes["Orario uscita"]=iv["endTimeClip"]
         participantRes["Assenza intermedia arrotondata"] = roundTime(participantRes["Assenza intermedia sogliata"], midStep, midRoundDir)
         participantRes["Presente complessivo arrotondato"]=(meetingEndTime - meetingStartTime).seconds - participantRes["Assenza inizio arrotondata"] - participantRes["Assenza fine arrotondata"] - participantRes["Assenza intermedia arrotondata"]
+        participantRes["Codice riunione"]=meetingCode
+        participantRes["Orario inizio evento"]=meetingStartTime
+        participantRes["Orario fine evento"]=meetingEndTime
         
         results.append(participantRes)
 

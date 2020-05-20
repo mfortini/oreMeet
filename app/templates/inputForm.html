@@ -19,11 +19,11 @@
                     <form  class="col-md-6 form" action="/meetReport/" method="POST" enctype="multipart/form-data">
                         <div class="form-group">
                             <label for="file" >Report meeting:</label>
-                            <input type="file" class="form-control-file col-6" id="file" name="file" required>
+                            <input type="file" class="form-control-file" id="file" name="file" required>
                         </div>
                         <div class="form-group">
                             <label for="calFile" >Calendar:</label>
-                            <input type="file" class="form-control-file col-6" id="calFile" name="calFile">
+                            <input type="file" class="form-control-file" id="calFile" name="calFile">
                         </div>
                         <div class="form-group">
                             <label for="meetingCode" >Codice meeting:</label>
@@ -134,8 +134,6 @@
                 console.log(meetingCode)
                 $('#meetingCode').val(meetingCode.v);
 
-
-
                 jsond=XLSX.utils.sheet_to_json(sheet);
                 minDate = jsond[0]["Data"];
                 maxDate = jsond[0]["Data"];
@@ -154,8 +152,30 @@
             };
             reader.readAsArrayBuffer(f);
         }
+
+
+        function handleCalFile(e) {
+            var files = e.target.files;
+
+            if (files.length > 0) {
+                $("#meetingCode").val("");
+                $("#meetingCode").prop("disabled", true);
+
+                $("#startTime").val("");
+                $("#startTime").prop("disabled", true);
+
+                $("#endTime").val("");
+                $("#endTime").prop("disabled", true);
+            } else {
+                $("#startTime").prop("enabled", true);
+            }
+        }
+
 	var xlf = $('#file');
 	xlf.change(handleFile);
+
+	var calf = $('#calFile');
+	calf.change(handleCalFile);
     </script>
   </body>
 </html>

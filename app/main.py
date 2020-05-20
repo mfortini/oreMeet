@@ -4,6 +4,7 @@ from fastapi.templating import Jinja2Templates
 from fastapi.responses import StreamingResponse
 
 from worker import meetReport
+from os.path import basename
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -25,9 +26,9 @@ async def read_item(request: Request, id: str):
 async def create_file(
     file: UploadFile = File(...),
     calFile: UploadFile = File(None),
-    meetingCode: str = Form(...),
-    startTime: str = Form(...),
-    endTime: str = Form(...),
+    meetingCode: str = Form(""),
+    startTime: str = Form(""),
+    endTime: str = Form(""),
     startStep: int = Form(...),
     startRoundDir: str = Form(...),
     midThr: int = Form(...),
@@ -40,9 +41,10 @@ async def create_file(
     print(calFile)
     result=meetReport(file.filename,file.file, calFile.file if calFile else None, meetingCode, startTime, endTime, startStep, startRoundDir, midThr, midStep, midRoundDir, endStep, endRoundDir)
     result.seek(0)
+    outfilename=basename(file.filename)+"_reportOre.xlsx"
     return StreamingResponse(
             result,
             media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            #headers={'Content-Disposition': 'attachment;filename="pippo.csv"'}
+            headers={'Content-Disposition': 'attachment;filename='+outfilename}
         )
 
