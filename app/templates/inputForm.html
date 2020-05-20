@@ -15,103 +15,129 @@
         <div class="container">
             <div class="row">
                 <div class="col-12">
-                    <h2>Meet Report</h2>
-                    <form  class="col-md-6 form" action="/meetReport/" method="POST" enctype="multipart/form-data">
-                        <div class="form-group">
-                            <label for="file" >Report meeting:</label>
-                            <input type="file" class="form-control-file" id="file" name="file" required>
+                    <h1>Meet Report</h1>
+                    <p>Questo strumento permette di ottenere la somma delle ore di presenza per ogni partecipante a una conferenza di Google Hangouts Meet. I dati necessari possono essere inseriti manualmente, oppure ottenuti in modo automatico
+                    fornendo un calendario</p>
+                    <p>I dati forniti vengono memorizzati in memoria volatile per il solo tempo necessario all'elaborazione.</p>
+                    <p>NB <strong>non</strong> si fornisce alcun tipo di garanzia sulla qualità dell'output prodotto.</p>
+                    <form  class="form" action="/meetReport/" method="POST" enctype="multipart/form-data">
+                        <div class="form-group row border">
+                            <h3 class="col-12">File di input</h3>
+                            <div class="col-lg-6">
+                                <label for="file" class="col-form-label" >File di log del meeting:</label>
+                                <input type="file" class="form-control-file" id="file" name="file" required>
+                                <small id="fileHelpBlock" class="form-text text-muted">
+                                    Il file di log di Google Hangouts Meet (Formato .csv o .xls(x))
+                                </small>
+                            </div>
+                            <div class="col-lg-6">
+                                <label for="calFile" >File del calendario:</label>
+                                <input type="file" class="form-control-file" id="calFile" name="calFile">
+                                <small id="calFileHelpBlock" class="form-text text-muted">
+                                    L'esportazione del calendario (Formato .ics)
+                                </small>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="calFile" >Calendar:</label>
-                            <input type="file" class="form-control-file" id="calFile" name="calFile">
-                        </div>
-                        <div class="form-group">
-                            <label for="meetingCode" >Codice meeting:</label>
-                            <input type="text" id="meetingCode" class="form-control" name="meetingCode" />
-                        </div>
-                        <div class="form-group">
-                            <label for="startTime" >Data e ora inizio:</label>
-                            <input type="text" id="startTime"  class="form-control" name="startTime"/>
-                        </div>
-                        <div class="form-group">
-                            <label for="endTime" >Data e ora fine:</label>
-                            <input type="text" id="endTime"  class="form-control" name="endTime" />
+                        <div class="form-group row border">
+                            <h3 class="col-12">Informazioni sull'evento</h3>
+                            <div class="col-lg-4">
+                                <label for="meetingCode">Codice meeting:</label>
+                                <input type="text" id="meetingCode" class="form-control" name="meetingCode" />
+                            </div>
+                            <div class="col-lg-4">
+                                <label for="startTime">Data e ora inizio:</label>
+                                <input type="text" id="startTime"  class="form-control" name="startTime"/>
+                            </div>
+                            <div class="col-lg-4">
+                                <label for="endTime" >Data e ora fine:</label>
+                                <input type="text" id="endTime"  class="form-control" name="endTime" />
+                            </div>
                         </div>
 
-                        <div class="form-group">
-                            <div class="form-group">
+                        <div class="form-group row border">
+                            <h3 class="col-12">Impostazioni</h3>
+                            <h4 class="col-12">Entrata</h4>
+                            <div class="col-lg-4">
                                 <label for="startStep">Passo arrotondamento entrata (s):</label>
                                 <input type="text" id="startStep"  class="form-control" name="startStep" value="900" maxlength="6" required/>
                             </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input type="radio" id="down" name="startRoundDir" class="form-check-input" value="down">Per difetto
-                                </label>
+                            <div class="col-lg-4">
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input type="radio" id="down" name="startRoundDir" class="form-check-input" value="down">Per difetto
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input type="radio" id="up" name="startRoundDir" class="form-check-input" value="up">Per eccesso
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input type="radio" id="round" name="startRoundDir" class="form-check-input" value="round" checked>Arrotondato
+                                    </label>
+                                </div>
                             </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input type="radio" id="up" name="startRoundDir" class="form-check-input" value="up">Per eccesso
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input type="radio" id="round" name="startRoundDir" class="form-check-input" value="round" checked>Arrotondato
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="form-group">
+                            <h4 class="col-12">Interruzioni</h4>
+                            <div class="col-lg-4">
                                 <label for="midThr">Soglia interruzioni (s):</label>
                                 <input type="text" id="midThr"  class="form-control" name="midThr" value="300" maxlength="6" required />
                             </div>
-                            <div class="form-group">
+                            <div class="col-lg-4">
                                 <label for="midStep">Passo arrotondamento interruzioni (s):</label>
                                 <input type="text" id="midStep"  class="form-control" name="midStep" value="900" maxlength="6" required/>
                             </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input type="radio" id="down" name="midRoundDir" class="form-check-input" value="down" required>Per difetto
-                                </label>
+                            <div class="col-lg-4">
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input type="radio" id="down" name="midRoundDir" class="form-check-input" value="down" required>Per difetto
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input type="radio" id="up" name="midRoundDir" class="form-check-input" value="up" required>Per eccesso
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input type="radio" id="round" name="midRoundDir" class="form-check-input" value="round" checked required>Arrotondato
+                                    </label>
+                                </div>
                             </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input type="radio" id="up" name="midRoundDir" class="form-check-input" value="up" required>Per eccesso
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input type="radio" id="round" name="midRoundDir" class="form-check-input" value="round" checked required>Arrotondato
-                                </label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="form-group">
+                            <h4 class="col-12">Uscita</h4>
+                            <div class="col-lg-4">
                                 <label for="endStep">Passo arrotondamento uscita (s):</label>
                                 <input type="text" id="midStep"  class="form-control" name="endStep" value="900" maxlength="6" required />
                             </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input type="radio" id="down" name="endRoundDir" class="form-check-input" value="down">Per difetto
-                                </label>
+                            <div class="col-lg-4">
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input type="radio" id="down" name="endRoundDir" class="form-check-input" value="down">Per difetto
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input type="radio" id="up" name="endRoundDir" class="form-check-input" value="up">Per eccesso
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input type="radio" id="round" name="endRoundDir" class="form-check-input" value="round" checked>Arrotondato
+                                    </label>
+                                </div>
                             </div>
-                            <div class="form-check">
-                                <label class="form-check-label">
-                            <input type="radio" id="up" name="endRoundDir" class="form-check-input" value="up">Per eccesso
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <label class="form-check-label">
-                            <input type="radio" id="round" name="endRoundDir" class="form-check-input" value="round" checked>Arrotondato
-                        </label>
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary">Elabora</button>
+                        </div>
+                        <button type="submit" class="btn-block btn-lg btn-primary">Elabora</button>
                     </form>
+                </div>
             </div>
+            <footer>
+                <div class="footer-copyright text-center py-3">
+                    <p>© 2020 Matteo Fortini, MIT License.<br>Code repository: <a href="https://github.com/mfortini/oreMeet">https://github.com/mfortini/oreMeet</a>
+                </div>
+            </footer>
+        </div>
 
-        </div>
-        </div>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -147,8 +173,8 @@
                     }
                 }
 
-                $("#startTime").val(minDate);
-                $("#endTime").val(maxDate);
+                $("#startTime").val(minDate + " ??");
+                $("#endTime").val(maxDate + " ??");
             };
             reader.readAsArrayBuffer(f);
         }
