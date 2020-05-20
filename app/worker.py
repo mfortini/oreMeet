@@ -210,13 +210,13 @@ def meetReport (fileName, meetFileData, icsFileData, meetingCode, _startTime, _e
     meetingData.loc[:,"startTimeClip"]=meetingData["startTime"].clip(lower=meetingStartTime,upper=meetingEndTime)
     meetingData.loc[:,"endTimeClip"]=meetingData["endTime"].clip(lower=meetingStartTime,upper=meetingEndTime)
 
-    participantsTime=meetingData.groupby(["Identificatore partecipante", "Nome partecipante", "Nome evento"])
+    participantsTime=meetingData.groupby(["Nome partecipante", "Identificatore partecipante", "Nome evento"])
 
     results=[]
 
     for name,g in participantsTime:
-        participantId = name[0]
-        participantName = name[1]
+        participantName = name[0]
+        participantId = name[1]
         participantRes={
                 "Id": participantId,
                 "Nome": participantName,
