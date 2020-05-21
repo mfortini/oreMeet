@@ -183,6 +183,8 @@ def meetReport (fileName, meetFileData, icsFileData, meetingCode, _startTime, _e
     for meetingCode in meetingCodes:
         meetingData = meetData[meetData["Codice riunione"]==meetingCode]
 
+        meetingName="N/A"
+
         if (icsFileData):
             icsData=icsFileData.read()
             if len(icsData) > 0:
@@ -199,7 +201,7 @@ def meetReport (fileName, meetFileData, icsFileData, meetingCode, _startTime, _e
                         #print ("COUNT", count, "len meetdata", len(meetData))
 
                         if count > (len(meetingData) * .5):
-                            meetingCode = getEventMeetingCode(e)
+                            meetingName=e.name
                             meetingStartTime = calStartTime
                             meetingEndTime = calEndTime
                             break
@@ -224,6 +226,7 @@ def meetReport (fileName, meetFileData, icsFileData, meetingCode, _startTime, _e
                     "Assenza intermedia arrotondata":0,
                     "Assenza intermedia":0,
                     "Presente netto":0,
+                    "Evento": meetingName
                     }
             beginning=True
             logging.debug("participantName {}".format(participantName))
