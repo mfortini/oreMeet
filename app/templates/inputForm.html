@@ -16,10 +16,11 @@
             <div class="row">
                 <div class="col-12">
                     <h1>Meet Report</h1>
-                    <p>Questo strumento permette di ottenere la somma delle ore di presenza per ogni partecipante a una conferenza di Google Hangouts Meet. I dati necessari possono essere inseriti manualmente, oppure ottenuti in modo automatico
+                    <small><i><p>Questo strumento permette di ottenere la somma delle ore di presenza per ogni partecipante a una conferenza di Google Hangouts Meet. I dati necessari possono essere inseriti manualmente, oppure ottenuti in modo automatico
                     fornendo un calendario</p>
                     <p>I dati forniti vengono memorizzati in memoria volatile per il solo tempo necessario all'elaborazione.</p>
-                    <p>NB <strong>non</strong> si fornisce alcun tipo di garanzia sulla qualità dell'output prodotto.</p>
+                    <p>NB Questo servizio viene offerto gratuitamente. <strong>Non</strong> si fornisce alcun tipo di garanzia sulla qualità dell'output prodotto.</p>
+                        </i></small>
                     <form  class="form" action="/meetReport/" method="POST" enctype="multipart/form-data">
                         <div class="form-group row border">
                             <h3 class="col-12">File di input</h3>
@@ -47,10 +48,16 @@
                             <div class="col-lg-4">
                                 <label for="startTime">Data e ora inizio:</label>
                                 <input type="text" id="startTime"  class="form-control" name="startTime"/>
+                                <small id="startTimeHelpBlock" class="form-text text-muted">
+                                    Data e ora d'inizio: mantenere il formato proposto, eliminare eventuali indicazioni di fuso orario
+                                </small>
                             </div>
                             <div class="col-lg-4">
                                 <label for="endTime" >Data e ora fine:</label>
                                 <input type="text" id="endTime"  class="form-control" name="endTime" />
+                                <small id="endTimeHelpBlock" class="form-text text-muted">
+                                    Data e ora di fine: mantenere il formato proposto, eliminare eventuali indicazioni di fuso orario
+                                </small>
                             </div>
                         </div>
 
@@ -133,7 +140,7 @@
             </div>
             <footer>
                 <div class="footer-copyright text-center py-3">
-                    <p>© 2020 Matteo Fortini, MIT License.<br>Code repository: <a href="https://github.com/mfortini/oreMeet">https://github.com/mfortini/oreMeet</a>
+                    <small><p>© 2020 Matteo Fortini, MIT License.<br>Code repository: <a href="https://github.com/mfortini/oreMeet">https://github.com/mfortini/oreMeet</a></small>
                 </div>
             </footer>
         </div>
