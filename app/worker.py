@@ -188,9 +188,9 @@ def meetingIntervals(meetingData, meetingCode, meetingName, meetingStartTime, me
             if len(intervals) == 0 or tt["startTime"] > intervals[-1]["endTime"]:
                 intervals.append(tt[["startTime", "endTime", "startTimeClip","endTimeClip"]])
             else:
-                logging.warning("overlapping intervals {} and {}".format(intervals[-1],tt[["startTime", "endTime"]]))
-                intervals[-1]["endTimeClip"]=tt["endTimeClip"]
-                intervals[-1]["endTime"]=tt["endTime"]
+                logging.warning("overlapping intervals {} {} and {} {}".format(intervals[-1]["startTime"],intervals[-1]["endTime"],tt["startTime"], tt["endTime"]))
+                intervals[-1]["endTimeClip"]=max(intervals[-1]["endTimeClip"],tt["endTimeClip"])
+                intervals[-1]["endTime"]=max(intervals[-1]["endTime"],tt["endTime"])
 
         curTime=meetingStartTime
         for iv in intervals:
