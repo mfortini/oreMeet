@@ -162,10 +162,10 @@ def convertDates(_startTime, _endTime, meetingData):
     return meetingStartTime, meetingEndTime, meetingData
 
 def meetingIntervals(meetingData, meetingCode, meetingName, meetingStartTime, meetingEndTime, startStep, startRoundDir, midThr, midStep, midRoundDir, endStep, endRoundDir):
-    meetingData = meetingData[((meetingData["startTime"] >= meetingStartTime) & (meetingData["startTime"] < meetingEndTime)) | ((meetingData["endTime"] > meetingStartTime) & (meetingData["endTime"] <= meetingEndTime))]
-    logging.debug(meetingData)
     meetingData.loc[:,"startTimeClip"]=meetingData["startTime"].clip(lower=meetingStartTime,upper=meetingEndTime)
     meetingData.loc[:,"endTimeClip"]=meetingData["endTime"].clip(lower=meetingStartTime,upper=meetingEndTime)
+    meetingData=meetingData[meetingData["startTimeClip"]!=meetingData["endTimeClip"]]
+    logging.debug("meetingData\n{}".format(meetingData[["Nome partecipante","startTime","endTime"]]))
 
     participantsTime=meetingData.groupby(["Nome partecipante"])
 
@@ -260,12 +260,12 @@ def meetReport (fileName, meetFileData, icsFileData, meetingCode, _startTime, _e
             for e in cal.events:
                 logging.info("event {} meetingCode {}".format(repr(e), getEventMeetingCode(e)))
                 if getEventMeetingCode(e) == meetingCode:
-                    logging.info("event {}".format(repr(e)))
                     calStartTime = pd.to_datetime(e.begin.datetime).tz_convert(TZ).tz_localize(None)
                     calEndTime = pd.to_datetime(e.end.datetime).tz_convert(TZ).tz_localize(None)
                     meetingName=e.name
                     meetingStartTime = calStartTime
                     meetingEndTime = calEndTime
+                    logging.info("event {} startTime {} endTime {}".format(repr(e),meetingStartTime, meetingEndTime))
                     results += meetingIntervals(meetingData, meetingCode, meetingName, meetingStartTime, meetingEndTime, startStep, startRoundDir, midThr, midStep, midRoundDir, endStep, endRoundDir)
 
         else:
