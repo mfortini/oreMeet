@@ -165,9 +165,14 @@ def meetingIntervals(meetingData, meetingCode, meetingName, meetingStartTime, me
     meetingData.loc[:,"startTimeClip"]=meetingData["startTime"].clip(lower=meetingStartTime,upper=meetingEndTime)
     meetingData.loc[:,"endTimeClip"]=meetingData["endTime"].clip(lower=meetingStartTime,upper=meetingEndTime)
     meetingData=meetingData[meetingData["startTimeClip"]!=meetingData["endTimeClip"]]
-    logging.debug("meetingData\n{}".format(meetingData[["Nome partecipante","startTime","endTime"]]))
+    try:
+        logging.debug("meetingData\n{}".format(meetingData[["Nome partecipante","startTime","endTime"]]))
 
-    participantsTime=meetingData.groupby(["Nome partecipante"])
+        participantsTime=meetingData.groupby(["Nome partecipante"])
+    except KeyError:
+        logging.debug("meetingData\n{}".format(meetingData[["Nome dell'attore","startTime","endTime"]]))
+
+        participantsTime=meetingData.groupby(["Nome dell'attore"])
 
     results = []
 
